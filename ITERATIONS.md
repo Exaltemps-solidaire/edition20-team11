@@ -102,7 +102,77 @@ suivi de progression avancé, ACTIV' et Sentinelle, tout contenu médical/juridi
     - `e2e/demo.spec.ts` — 2 étapes ajoutées (choix du persona, vérification du tableau de
       bord), hors DoD.
 
-## Itération 2 : la BURN'ette consulte les ateliers de son module actif
+## Itération 1bis : charte graphique L'BURN sur les écrans existants
+
+**Origine** : demande du développeur en cours de hackathon, hors programme initial —
+« utiliser la charte graphique de https://lesburn-ettes.com/, le tableau de bord va être
+intégré dedans ». Taillée en itération ici au lieu d'être codée directement.
+
+⚠️ **Reprioritisation** : insérée avant l'« Itération 2 : Mon module » (qui devient
+Itération 3), à la demande du développeur. Les cadreurs n'ont pas validé ce changement
+d'ordre — à confirmer avec eux au prochain tour de test.
+
+❓ **Ambiguïté résolue avec le développeur** : « intégré dedans » visait au départ aussi
+une préparation à l'embarquement (CSS scoping, retrait d'un header/footer propre) en plus
+de la charte. ✂️ Coupé : avec ~15 minutes restantes annoncées le 2026-11-18 à 17:40 CET
+(sous le plancher de ~25 min que le plan pose pour une itération complète), la préparation
+à l'intégration et l'écran « Mon module » sont reportés en backlog ; cette itération ne
+porte que la charte visuelle.
+
+- **Dans le périmètre** :
+  - couleurs, typographies (`Archivo Black` pour les titres, `Libre Franklin` pour le
+    corps, auto-hébergées via `next/font/google`, pas de CDN externe) et palette de la
+    charte L'BURN sur les 2 écrans existants (« Qui êtes-vous ? » et tableau de bord) ;
+  - couleurs extraites des variables `--gcid-*` du site vitrine (`#dc3129` primaire,
+    `#ffb4aa` secondaire, `#23262f` texte, `#fff8f4` fond), pas des presets Gutenberg
+    génériques repérés dans la même page.
+- **Hors périmètre** : logo de l'association (passerait par l'API, pas par une URL
+  externe — reporté), écran « Mon module », préparation à l'embarquement (scoping CSS,
+  retrait de header/footer).
+- **Critères d'acceptation** :
+  - Étant donné l'écran « Qui êtes-vous ? », quand je le charge, alors les boutons de
+    persona et les titres utilisent la palette et les polices de la charte.
+  - Étant donné le tableau de bord, quand je le charge, alors il utilise la même palette
+    et les mêmes polices.
+  - Étant donné l'application déployée, quand j'inspecte le CSS servi, alors les polices
+    sont auto-hébergées (aucun appel à `fonts.googleapis.com`).
+- **Hypothèse de l'équipe couverte** : aucune — dossier d'hypothèses vide.
+- **Codage estimé** : 5 minutes (CSS et polices uniquement, pas de nouvelle logique).
+- **Fichiers prévus** :
+  - `frontend/src/app/layout.tsx` (chargement des polices)
+  - `frontend/src/app/globals.css` (variables de couleur, typographie des titres)
+  - `frontend/src/app/page.module.css`
+  - `frontend/src/app/tableau-de-bord/[personaId]/page.module.css` (nouveau)
+  - `frontend/src/app/tableau-de-bord/[personaId]/page.tsx` (classes CSS)
+- **Tests unitaires prévus** : aucun — balisage et style purs, aucune logique métier
+  ajoutée (règle explicite de `docs/testing-guidelines.md`).
+- **Étapes ajoutées à la démo** : aucune — la démo existante couvre déjà les deux écrans
+  concernés, son contenu ne change pas.
+- **Bilan** :
+  - **Durée de codage réelle** : 1 minute.
+  - **Critères d'acceptation** : les 3 sont satisfaits — vérifié en relisant le CSS
+    exporté (`dc3129`/`ffb4aa` présents), et en confirmant que les polices sont servies
+    en `.woff2` locaux (`/_next/static/media/`), aucun appel externe.
+  - **Reporté** : logo de l'association, écran « Mon module » (→ Itération 3 ci-dessous),
+    préparation à l'embarquement (→ backlog, non détaillé).
+  - **Ce que le harnais a bloqué ou refusé** : rien ; `npm test` passe (inchangé, aucune
+    nouvelle logique), `verifier-deployabilite.sh` ne signale aucune borne.
+  - **Modifications** :
+    - `frontend/src/app/layout.tsx` — polices `Archivo Black` / `Libre Franklin` via
+      `next/font/google` (auto-hébergées), remplace `Geist`/`Geist Mono` — sert le
+      critère 3.
+    - `frontend/src/app/globals.css` — variables de couleur de la charte, polices des
+      titres/corps, suppression du mode sombre générique du gabarit (hors charte,
+      inutilisé) — sert les critères 1 et 2.
+    - `frontend/src/app/page.module.css` — boutons de persona en rouge primaire avec
+      survol saumon clair — sert le critère 1.
+    - `frontend/src/app/tableau-de-bord/[personaId]/page.module.css` (nouveau) — cartes
+      module actif/prochain atelier avec liseré de la couleur primaire — sert le
+      critère 2.
+    - `frontend/src/app/tableau-de-bord/[personaId]/page.tsx` — application des classes
+      du module CSS — sert le critère 2.
+
+## Itération 3 (anciennement 2) : la BURN'ette consulte les ateliers de son module actif
 
 - **Dans le périmètre** :
   - écran « Mon module », accessible depuis le tableau de bord (clic sur le module
@@ -140,3 +210,8 @@ suivi de progression avancé, ACTIV' et Sentinelle, tout contenu médical/juridi
 3. Rappel par email (Brevo) avant la session réservée.
 4. (Si le temps le permet encore) rendre les données du tableau de bord et du module
    réelles, via l'API, plutôt qu'en dur côté front.
+5. Logo de l'association sur les écrans (reporté de l'Itération 1bis — passerait par une
+   route de l'API, pas par une URL externe, cf. `docs/guidelines-deploiement.md` §3).
+6. Préparation du tableau de bord à l'embarquement dans `lesburn-ettes.com` (reporté de
+   l'Itération 1bis — scoping CSS, retrait d'un header/footer propre à l'app). ❓ À
+   cadrer avec les cadreurs : iframe, web component, ou autre mécanisme ?
