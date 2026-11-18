@@ -72,7 +72,35 @@ suivi de progression avancé, ACTIV' et Sentinelle, tout contenu médical/juridi
   bord d'un persona (persona connu → bon module/atelier ; persona inconnu → cas géré).
 - **Étapes ajoutées à la démo** : ouvrir l'application, choisir un persona, vérifier que
   le tableau de bord affiche son module actif et son prochain atelier.
-- **Bilan** : _à remplir en fin d'itération._
+- **Bilan** :
+  - **Durée de codage réelle** : 9 minutes (chrono `.iterations/1.debut` → `.iterations/1.fin`),
+    pas de dépassement du budget de 10 minutes.
+  - **Blocage hors codage (déploiement)** : le premier `podman build` du front a buté sur la
+    limite de pull anonyme de Docker Hub pour `nginx:1.27-alpine` (~20 minutes perdues en
+    tentatives). Levé par le développeur via `podman login docker.io` avec son compte
+    personnel. Signalé ici pour la suite : si ça revient, se reconnecter plutôt que
+    réessayer en boucle.
+  - **Critères d'acceptation** : les 3 sont satisfaits (vérifiés en local sur
+    `localhost:8080` et par la démo Playwright).
+  - **Reporté** : rien — tout le périmètre prévu est livré.
+  - **Ce que le harnais a bloqué ou refusé** : rien ; `npm test` et
+    `verifier-deployabilite.sh` passent du premier coup, le signal à PM Lab est passé.
+  - **Modifications** :
+    - `frontend/src/data/personas.ts` — données en dur (2 personas) + `getPersona()`,
+      fonction pure testée — sert les 3 critères.
+    - `frontend/src/data/personas.test.ts` — 2 tests unitaires sur `getPersona()`.
+    - `frontend/src/app/page.tsx` — écran « Qui êtes-vous ? », remplace le gabarit
+      Next.js par défaut — sert le critère 1.
+    - `frontend/src/app/tableau-de-bord/[personaId]/page.tsx` — écran tableau de bord en
+      route dynamique statique (`generateStaticParams`), plutôt que le
+      `tableau-de-bord/page.tsx` prévu au plan : plus simple à exporter statiquement sans
+      état client — sert les critères 1 et 2.
+    - `api/Dockerfile`, `frontend/Dockerfile` — image de base qualifiée en
+      `docker.io/library/...` (non prévu au plan, imposé par le `CLAUDE.md` du serveur :
+      la résolution de nom court échoue hors terminal interactif).
+    - `.env.example`, `DEPLOIEMENT.md`, `podman-compose.yml` — squelette de déploiement.
+    - `e2e/demo.spec.ts` — 2 étapes ajoutées (choix du persona, vérification du tableau de
+      bord), hors DoD.
 
 ## Itération 2 : la BURN'ette consulte les ateliers de son module actif
 
