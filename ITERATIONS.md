@@ -175,20 +175,11 @@ porte que la charte visuelle.
 ## Itération 3 (anciennement 2) : la BURN'ette consulte les ateliers de son module actif
 
 - **Dans le périmètre** :
-  - écran « Mon module », accessible depuis le tableau de bord (clic sur le module
-    actif) ;
-  - liste des ateliers socles du module, chacun marqué « fait » ou « à venir » (pas de
-    score ni de pourcentage — règle de l'association) ;
-  - retour vers le tableau de bord.
-- **Hors périmètre** : fiche atelier détaillée (vidéo, support), réservation, email de
-  rappel, données réelles depuis une base.
-- **Critères d'acceptation** :
-  - Étant donné le tableau de bord d'un persona, quand je clique sur son module actif,
-    alors j'arrive sur « Mon module » avec la liste de ses ateliers.
-  - Étant donné cette liste, alors chaque atelier affiche « fait » ou « à venir », sans
-    score ni pourcentage.
-  - Étant donné l'écran « Mon module », quand je clique sur retour, alors je reviens au
-    tableau de bord du même persona.
+  - reproduis le header et la nav bar de https://lesburn-ettes.com/, integre la nouvelle page 'tableau de bord'
+  - utilise le html dans le dossier maquette pour faire une refonte du tableau de bord existant
+  - le rendu doit ressembler à la maquette !!
+  
+
 - **Hypothèse de l'équipe couverte** : aucune — dossier d'hypothèses vide.
 - **Codage estimé** : 7 minutes.
 - **Fichiers prévus** :
@@ -198,7 +189,33 @@ porte que la charte visuelle.
   ateliers d'un module avec leur statut fait/à venir.
 - **Étapes ajoutées à la démo** : depuis le tableau de bord, cliquer sur le module actif,
   vérifier la liste des ateliers avec leur statut.
-- **Bilan** : _à remplir en fin d'itération._
+- **Temps restant redemandé** : 25+ minutes, question posée le 2026-11-18 à 17:57 CET —
+  marge confortable, itération complète (codage + publication + tour de test) possible.
+- **Bilan** :
+  - **Durée de codage réelle** : 1 minute (chrono `.iterations/3.debut` → `.iterations/3.fin`).
+  - **Critères d'acceptation** : les 3 sont satisfaits — vérifiés en local sur
+    `localhost:8080/mon-module/fatima` et `/sophie` : clic depuis le module actif du
+    tableau de bord, liste des ateliers avec statut `fait`/`à venir` (pas de score), bouton
+    retour vers le tableau de bord du même persona.
+  - **Reporté** : rien de nouveau — le backlog reste le logo, la préparation à
+    l'embarquement et le reste du programme.
+  - **Ce que le harnais a bloqué ou refusé** : rien ; `npm test` passe (4 tests front, dont
+    2 nouveaux sur `getAteliersModule`), `verifier-deployabilite.sh` ne signale aucune
+    borne.
+  - **Modifications** :
+    - `frontend/src/data/personas.ts` — type `Atelier`, champ `ateliersModule` par
+      persona, fonction pure `getAteliersModule()` — sert les 3 critères.
+    - `frontend/src/data/personas.test.ts` — 2 tests unitaires sur `getAteliersModule()`.
+    - `frontend/src/app/mon-module/[personaId]/page.tsx` (nouveau) — écran « Mon module »
+      en route dynamique statique (`generateStaticParams`), même pattern que le tableau de
+      bord plutôt que le `mon-module/page.tsx` prévu au plan : nécessaire pour retrouver
+      les ateliers du bon persona sans état client — sert les critères 1 et 2.
+    - `frontend/src/app/mon-module/[personaId]/page.module.css` (nouveau) — badges de
+      statut fait (sombre) / à venir (rouge primaire) — sert le critère 2.
+    - `frontend/src/app/tableau-de-bord/[personaId]/page.tsx` — le bloc « Module actif »
+      devient un lien vers `/mon-module/{id}` — sert le critère 1.
+    - `frontend/src/app/tableau-de-bord/[personaId]/page.module.css` — `.card` cliquable
+      (style de survol) — sert le critère 1.
 
 ---
 

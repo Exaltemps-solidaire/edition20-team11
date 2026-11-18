@@ -26,7 +26,9 @@ export default async function TableauDeBord({
         </Link>
         <h1>Où j&apos;en suis, {persona.nom}</h1>
         <p>Parcours en cours : {persona.parcours}</p>
-        <div className={styles.card}>Module actif : {persona.moduleActif}</div>
+        <Link href={`/mon-module/${persona.id}`} className={styles.card}>
+          Module actif : {persona.moduleActif}
+        </Link>
         <div className={styles.card}>
           Prochain atelier accessible : {persona.prochainAtelier}
         </div>
