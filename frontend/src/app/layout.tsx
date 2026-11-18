@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Libre_Franklin } from "next/font/google";
+import { Header } from "@/components/Header";
 import "./globals.css";
 
 const archivoBlack = Archivo_Black({
@@ -22,7 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${archivoBlack.variable} ${libreFranklin.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

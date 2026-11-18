@@ -172,14 +172,28 @@ porte que la charte visuelle.
     - `frontend/src/app/tableau-de-bord/[personaId]/page.tsx` — application des classes
       du module CSS — sert le critère 2.
 
-## Itération 3 (anciennement 2) : la BURN'ette consulte les ateliers de son module actif
+## Itération 3 : la BURN'ette consulte les ateliers de son module actif
+
+⚠️ Les sections « Hors périmètre » et « Critères d'acceptation » ci-dessous avaient
+disparu sur disque (écrasées un temps par la demande devenue l'Itération 4) ; restaurées
+ici depuis le plan validé le 2026-11-18, sans changement de fond. L'itération est déjà
+livrée (voir « Bilan »), cette restauration ne rejoue rien.
 
 - **Dans le périmètre** :
-  - reproduis le header et la nav bar de https://lesburn-ettes.com/, integre la nouvelle page 'tableau de bord'
-  - utilise le html dans le dossier maquette pour faire une refonte du tableau de bord existant
-  - le rendu doit ressembler à la maquette !!
-  
-
+  - écran « Mon module », accessible depuis le tableau de bord (clic sur le module
+    actif) ;
+  - liste des ateliers socles du module, chacun marqué « fait » ou « à venir » (pas de
+    score ni de pourcentage — règle de l'association) ;
+  - retour vers le tableau de bord.
+- **Hors périmètre** : fiche atelier détaillée (vidéo, support), réservation, email de
+  rappel, données réelles depuis une base.
+- **Critères d'acceptation** :
+  - Étant donné le tableau de bord d'un persona, quand je clique sur son module actif,
+    alors j'arrive sur « Mon module » avec la liste de ses ateliers.
+  - Étant donné cette liste, alors chaque atelier affiche « fait » ou « à venir », sans
+    score ni pourcentage.
+  - Étant donné l'écran « Mon module », quand je clique sur retour, alors je reviens au
+    tableau de bord du même persona.
 - **Hypothèse de l'équipe couverte** : aucune — dossier d'hypothèses vide.
 - **Codage estimé** : 7 minutes.
 - **Fichiers prévus** :
@@ -189,8 +203,6 @@ porte que la charte visuelle.
   ateliers d'un module avec leur statut fait/à venir.
 - **Étapes ajoutées à la démo** : depuis le tableau de bord, cliquer sur le module actif,
   vérifier la liste des ateliers avec leur statut.
-- **Temps restant redemandé** : 25+ minutes, question posée le 2026-11-18 à 17:57 CET —
-  marge confortable, itération complète (codage + publication + tour de test) possible.
 - **Bilan** :
   - **Durée de codage réelle** : 1 minute (chrono `.iterations/3.debut` → `.iterations/3.fin`).
   - **Critères d'acceptation** : les 3 sont satisfaits — vérifiés en local sur
@@ -217,6 +229,77 @@ porte que la charte visuelle.
     - `frontend/src/app/tableau-de-bord/[personaId]/page.module.css` — `.card` cliquable
       (style de survol) — sert le critère 1.
 
+## Itération 4 : le header et la navigation de lesburn-ettes.com sur l'application
+
+**Origine** : demande du développeur — « refonte totale de la page tableau de bord »
+d'après le fichier déposé dans `maquette/`, pour un rendu fidèle à cette maquette.
+
+✂️ **Découpée en plusieurs itérations** : la maquette est un export d'outil de design
+(moteur de templating propriétaire `{{...}}`/`sc-if`, illustrations SVG par stade pour un
+module « Ma plante », infobulles) — pas du code portable, et largement au-dessus de
+10 minutes de codage en un bloc. Avec 45+ minutes annoncées le 2026-11-18 à 18:10 CET, la
+refonte complète tient, mais répartie : cette itération ne porte que le header/nav (le
+plus petit sous-ensemble fidèle à la maquette) ; l'Itération 5 portera la mise en page de
+la page d'accueil du tableau de bord (salutation, disposition en cartes) ; le module « Ma
+plante » illustré reste en backlog, non détaillé (cf. ❓ plus bas).
+
+- **Dans le périmètre** :
+  - bandeau d'en-tête, identique sur les 3 écrans existants (« Qui êtes-vous ? »,
+    tableau de bord, mon module) : logo texte « L'BURN » + tagline, 4 liens de
+    navigation (Accueil, Accompagnements, Prévention, Ressources — décoratifs, sans
+    destination réelle hors de l'app, comme dans la maquette), pastille active
+    « Mon espace » ;
+  - couleurs et disposition reprises telles quelles de `maquette/Mon tableau de bord –
+    Les BURN'ettes 1.html` (fond `#FDF7F5`, bordure `#EED9D5`, pastille active
+    `#F9E1E1`/`#C0392B`).
+- **Hors périmètre** : salutation et disposition en cartes de la page d'accueil du
+  tableau de bord (→ Itération 5), module « Ma plante » illustré, liens de nav
+  fonctionnels vers d'autres pages du site vitrine, avatar dynamique par persona dans la
+  pastille (pastille statique pour cette itération).
+- **Critères d'acceptation** :
+  - Étant donné n'importe lequel des 3 écrans de l'application, quand je le charge, alors
+    je vois le même bandeau d'en-tête (logo, tagline, 4 liens, pastille « Mon espace »).
+  - Étant donné le bandeau affiché, alors ses couleurs correspondent à celles de la
+    maquette (`#FDF7F5`, `#EED9D5`, `#F9E1E1`, `#C0392B`).
+  - Étant donné l'application déployée, quand j'inspecte le CSS servi, alors aucune
+    requête externe n'est faite pour l'afficher (pas de nouvelle police/CDN).
+- **Hypothèse de l'équipe couverte** : aucune — dossier d'hypothèses vide.
+- **Codage estimé** : 7 minutes.
+- **Fichiers prévus** :
+  - `frontend/src/components/Header.tsx` (nouveau)
+  - `frontend/src/components/Header.module.css` (nouveau)
+  - `frontend/src/app/layout.tsx` (insertion du bandeau)
+- **Tests unitaires prévus** : aucun — balisage et style purs, aucune logique métier
+  ajoutée (même raison qu'à l'Itération 1bis).
+- **Étapes ajoutées à la démo** : aucune — le bandeau est visuel, les étapes existantes
+  restent valables telles quelles.
+- **Bilan** : durée de codage réelle 0 min (sous l'estimation de 7 min), pas de
+  dépassement. Les 3 critères d'acceptation sont satisfaits : bandeau identique vérifié
+  sur `/`, `/tableau-de-bord/{fatima,sophie}` et `/mon-module/{fatima,sophie}` ; couleurs
+  `#fdf7f5`/`#eed9d5`/`#f9e1e1`/`#c0392b`/`#b8321f` retrouvées dans le CSS compilé ;
+  aucune URL externe dans le HTML servi. `npm test` passe (4 tests, inchangés — aucune
+  logique métier ajoutée). Le contrat de déployabilité ne signale aucune borne. Rien n'est
+  reporté : le périmètre prévu est intégralement livré. ⚠️ Écart non résolu : les couleurs
+  du bandeau (palette maquette) coexistent désormais avec celles du corps de page
+  (palette extraite du site en direct à l'Itération 1bis, légèrement différente) — à
+  réconcilier à l'Itération 5 quand les cartes du tableau de bord seront reprises sur la
+  même maquette. ❓ Le fichier `maquette/Mon tableau de bord – Les BURN'ettes 1.html` reste
+  non commité et non ignoré : à trancher avec le développeur (le garder en référence
+  versionnée, ou l'ajouter à `.gitignore`).
+  - **Modifications** :
+    - `frontend/src/components/Header.tsx` (nouveau) — bandeau logo/tagline/nav/pastille,
+      sert les 3 critères.
+    - `frontend/src/components/Header.module.css` (nouveau) — couleurs et disposition
+      reprises de la maquette, sert le critère des couleurs.
+    - `frontend/src/app/layout.tsx` — insertion de `<Header />` dans le corps commun à
+      tous les écrans, sert le critère d'identité sur les 3 écrans.
+
+## Itération 5 (à venir, détaillée au lancement) : salutation et disposition en cartes du tableau de bord
+
+D'après la même maquette : remplacer le titre actuel du tableau de bord par la salutation
+« Bonjour {persona}, prenez le temps qu'il vous faut » et réorganiser le module actif et
+le prochain atelier en cartes côte à côte, sans le module « Ma plante » illustré.
+
 ---
 
 ## À venir (non détaillé, backlog ordonné)
@@ -232,3 +315,10 @@ porte que la charte visuelle.
 6. Préparation du tableau de bord à l'embarquement dans `lesburn-ettes.com` (reporté de
    l'Itération 1bis — scoping CSS, retrait d'un header/footer propre à l'app). ❓ À
    cadrer avec les cadreurs : iframe, web component, ou autre mécanisme ?
+7. Module « Ma plante » (stade de reconstruction illustré, `maquette/`) — version
+   simplifiée envisageable (texte « Stade X sur 5 » + cadre visuel, sans les icônes SVG
+   par stade ni l'infobulle, qui ne sont pas portables tels quels). ❓ À cadrer avec les
+   cadreurs avant de construire quoi que ce soit : `ITERATIONS.md` pose depuis
+   l'Itération 3 une règle explicite de l'association — pas de score ni de pourcentage —
+   et un stade sur 5 est un indicateur de progression, pas une donnée neutre comme le
+   module actif ou le prochain atelier.
